@@ -1,11 +1,25 @@
-<script setup lang="ts"></script>
-
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <div>
+    <nav class="nav">
+      <router-link to="/">Home</router-link>
+      <router-link to="/login">Login</router-link>
+      <router-link to="/register">Register</router-link>
+    </nav>
+
+    <router-view />
+  </div>
 </template>
 
-<style scoped></style>
+<style>
+.nav {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  background: #111;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+}
+</style>
