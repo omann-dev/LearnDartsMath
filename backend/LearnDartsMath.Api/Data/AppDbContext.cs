@@ -9,7 +9,8 @@ public class AppDbContext : DbContext
     {
     }
 
-    public DbSet<Player> Players => Set<Player>();
+    public DbSet<User> Users => Set<User>();
+    public DbSet<PlayerProfile> PlayerProfiles => Set<PlayerProfile>();
     public DbSet<TrainingSession> TrainingSessions => Set<TrainingSession>();
     public DbSet<ThrowEntry> ThrowEntries => Set<ThrowEntry>();
 
@@ -17,14 +18,54 @@ public class AppDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Player>()
-            .Property(p => p.Name)
+        modelBuilder.Entity<User>()
+            .Property(u => u.Username)
+            .IsRequired()
+            .HasMaxLength(50);
+
+        modelBuilder.Entity<User>()
+            .Property(u => u.Email)
             .IsRequired()
             .HasMaxLength(100);
+
+        modelBuilder.Entity<User>()
+            .Property(u => u.PasswordHash)
+            .IsRequired();
+
+        modelBuilder.Entity<User>()
+            .HasIndex(u => u.Username)
+            .IsUnique();
+
+        modelBuilder.Entity<User>()
+            .HasIndex(u => u.Email)
+            .IsUnique();
+
+        modelBuilder.Entity<PlayerProfile>()
+            .Property(p => p.DisplayName)
+            .IsRequired()
+            .HasMaxLength(100);
+
+        modelBuilder.Entity<PlayerProfile>()
+            .HasOne(p => p.User)
+            .WithOne(u => u.PlayerProfile)
+            .HasForeignKey<PlayerProfile>(p => p.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<TrainingSession>()
             .Property(t => t.Mode)
             .IsRequired()
             .HasMaxLength(50);
+
+        modelBuilder.Entity<TrainingSession>()
+            .HasOne(t => t.User)
+            .WithMany(u => u.TrainingSessions)
+            .HasForeignKey(t => t.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<ThrowEntry>()
+            .HasOne(te => te.TrainingSession)
+            .WithMany(ts => ts.ThrowEntries)
+            .HasForeignKey(te => te.TrainingSessionId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

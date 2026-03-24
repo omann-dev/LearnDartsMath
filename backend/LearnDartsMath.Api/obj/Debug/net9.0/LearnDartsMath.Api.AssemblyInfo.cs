@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LearnDartsMath.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0f72203297909d3991d09aae30925992b4f9bfb8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+412dd8fed562e64a3ea31fa9df55ce91f4f9cc8b")]
 [assembly: System.Reflection.AssemblyProductAttribute("LearnDartsMath.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LearnDartsMath.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
