@@ -11,16 +11,18 @@
             <button @click="startGame">Start Game</button>
         </div>
 
-        <div v-else class="game">
-            <h1>Game is running</h1>
-            <p>Startscore: {{ currentScore }}</p>
+        <game-screen
+            v-else="gameStarted === true"
+            :current-score="currentScore"
+            @reset="resetGame" 
+        />
 
-            <button @click="resetGame">Back</button>
-        </div>
     </main>
 </template>
 
 <script setup lang = "ts">
+
+import GameScreen from '@/components/GameScreen.vue'
 
 import { ref } from 'vue'
 
@@ -44,12 +46,22 @@ function resetGame(): void {
 
 .page {
     padding: 2rem;
-}
-
-.setup,
-.game {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15vh;
+    margin-left: 30vw;
+    margin-right: 30vw;
+    border: 1px solid white;
+    border-radius: 32px;
+}
+
+.setup{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     gap: 1rem;
     max-width: 400px;
 }
