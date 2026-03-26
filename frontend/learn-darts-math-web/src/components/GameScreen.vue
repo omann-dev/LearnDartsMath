@@ -8,10 +8,6 @@
             @update:selected-score="onScoreSelected"
             @update:selected-modifier="selectedModifier = $event"
         />
-            
-        <p> Score: {{ selectedScore }}  Modifier: {{ selectedModifier }}</p>
-        <p> Thrown Score: {{  thrownScore }}</p>
-        <p> Throws: {{ throwCount }}</p>
 
         <button @click="$emit('reset')">Back</button>
     </div>
@@ -33,11 +29,13 @@ const selectedModifier = ref(<Modifier | undefined>(undefined))
 
 const props = defineProps<{
     currentScore: number
+    isGameFinished: boolean
 }>()
 
 const emit = defineEmits<{
     (e: 'reset'): void 
     (e: 'update:currentScore', value: number) : void
+    (e: 'update:isGameFinished', value: boolean) : void 
 }>()
 
 
@@ -51,18 +49,24 @@ function onScoreSelected(score : number) {
     thrownScore.value += score * multiplier
     throwCount.value++
 
+    selectedModifier.value = undefined
+    multiplier = 1
+
     if (throwCount.value === 3) {
         subtractScore()
     }
 }
 
 function subtractScore(){
-    emit('update:currentScore', props.currentScore - thrownScore.value)
+    if (props.currentScore > 0){
+        emit('update:currentScore', props.currentScore - thrownScore.value)
 
-    thrownScore.value = 0
-    throwCount.value = 0
-    selectedModifier.value = undefined
-    selectedScore.value = 0
+        thrownScore.value = 0
+        throwCount.value = 0
+        selectedModifier.value = undefined
+        selectedScore.value = 0
+    }
+    else emit('update:isGameFinished', true)
 }
 
 </script>
