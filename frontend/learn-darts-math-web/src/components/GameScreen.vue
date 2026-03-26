@@ -1,13 +1,31 @@
 <template>
     <div class="game">
-        <h1>Game is running</h1>
-        <p>Startscore: {{ currentScore  }}</p>
+        <h1>{{ currentScore }}</h1>
+
+        <ScoreSelection 
+            :selected-score = "selectedScore"
+            :selected-modifier="selectedModifier"
+            @update:selected-score="selectedScore = $event"
+            @update:selected-modifier="selectedModifier = $event"
+            />
+            
+            <p> Score: {{ selectedScore }}  Modifier: {{ selectedModifier }}</p>
+
 
         <button @click="$emit('reset')">Back</button>
     </div>
 </template>
 
 <script setup lang="ts">
+
+
+import ScoreSelection from './ScoreSelection.vue';
+import { ref } from 'vue'
+
+type Modifier = 'DOUBLE' | 'TRIPPLE'
+
+const selectedScore = ref(0)
+const selectedModifier = ref(<Modifier | undefined>(undefined))
 
 defineProps<{
     currentScore: number
