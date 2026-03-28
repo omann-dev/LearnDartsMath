@@ -1,8 +1,9 @@
 <template>
     <main class="page">
-        
+
         <GameFinishedScreen
             v-if="isGameFinished"
+            :thrown-darts="dartsThrown"
         />
 
         <GameSetupScreen 
@@ -15,8 +16,10 @@
             v-else
             :current-score="currentScore"
             :is-game-finished="isGameFinished"
+            :darts-thrown="dartsThrown"
             @update:current-score="currentScore = $event"
             @update:is-game-finished="isGameFinished = $event"
+            @update:darts-thrown="dartsThrown= $event"
             @reset="resetGame" 
         />
 
@@ -33,6 +36,8 @@ const gameStarted = ref(false)
 const startScore = ref(501)
 const currentScore = ref(501)
 const isGameFinished = ref(false)
+
+const dartsThrown = ref(0)
 
 function startGame(): void {
     currentScore.value = startScore.value
@@ -59,8 +64,6 @@ function resetGame(): void {
     margin-top: 15vh;
     margin-left: 30vw;
     margin-right: 30vw;
-    border: 1px solid white;
-    border-radius: 32px;
 }
 
 .setup{
@@ -78,12 +81,12 @@ button {
   background-color: #42b883;
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 4px;
   cursor: pointer;
 }
 
 button:hover {
-  opacity: 0.9;
+  opacity: 0.5;
 }
 
 </style>

@@ -21,16 +21,19 @@ type Modifier = 'DOUBLE' | 'TRIPLE'
 
 const selectedScore = ref(0)
 const selectedModifier = ref<Modifier | undefined>(undefined)
+const dartsTrownCounter = ref(0)
 
 const props = defineProps<{
     currentScore: number
     isGameFinished: boolean
+    dartsThrown : number
 }>()
 
 const emit = defineEmits<{
     (e: 'reset'): void
     (e: 'update:currentScore', value: number): void
     (e: 'update:isGameFinished', value: boolean): void
+    (e: 'update:dartsThrown', value: number): void
 }>()
 
 function onScoreSelected(score: number) {
@@ -45,9 +48,12 @@ function onScoreSelected(score: number) {
     const remainingScore = props.currentScore - thrownScore
     const isDouble = selectedModifier.value === 'DOUBLE'
 
+    dartsTrownCounter.value++
+
     if (remainingScore === 0 && isDouble) {
         emit('update:currentScore', 0)
         emit('update:isGameFinished', true)
+        emit('update:dartsThrown', dartsTrownCounter.value)
         resetSelection()
         return
     }

@@ -2,11 +2,15 @@
     <div class="finished">
         <h1> This game is finished </h1>
         <p> you won. </p>
+        <p> {{ thrownDarts }}</p>
     </div>
 </template>
 
 <script setup lang="ts">
 
+const props = defineProps<{
+    thrownDarts : number
+}>()
 
 </script>
 
