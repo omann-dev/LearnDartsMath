@@ -10,6 +10,9 @@
 <style scoped>
 .container {
   padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .button {
