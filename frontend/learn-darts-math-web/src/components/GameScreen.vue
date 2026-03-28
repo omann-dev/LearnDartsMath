@@ -3,7 +3,7 @@
         <h1>{{ currentScore }}</h1>
 
         <ScoreSelection 
-            :selected-score = "selectedScore"
+            :selected-score="selectedScore"
             :selected-modifier="selectedModifier"
             @update:selected-score="onScoreSelected"
             @update:selected-modifier="selectedModifier = $event"
@@ -14,18 +14,13 @@
 </template>
 
 <script setup lang="ts">
-
-
-import ScoreSelection from './ScoreSelection.vue';
 import { ref } from 'vue'
+import ScoreSelection from './ScoreSelection.vue'
 
 type Modifier = 'DOUBLE' | 'TRIPLE'
 
-let thrownScore = ref(0)
-let throwCount = ref(0)
-
 const selectedScore = ref(0)
-const selectedModifier = ref(<Modifier | undefined>(undefined))
+const selectedModifier = ref<Modifier | undefined>(undefined)
 
 const props = defineProps<{
     currentScore: number
@@ -33,63 +28,62 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-    (e: 'reset'): void 
-    (e: 'update:currentScore', value: number) : void
-    (e: 'update:isGameFinished', value: boolean) : void 
+    (e: 'reset'): void
+    (e: 'update:currentScore', value: number): void
+    (e: 'update:isGameFinished', value: boolean): void
 }>()
 
-
-function onScoreSelected(score : number) {
+function onScoreSelected(score: number) {
     selectedScore.value = score
 
     let multiplier = 1
+
     if (selectedModifier.value === 'DOUBLE') multiplier = 2
-    if (selectedModifier.value === 'TRIPLE') multiplier = 3 
+    if (selectedModifier.value === 'TRIPLE') multiplier = 3
 
-    thrownScore.value += score * multiplier
-    throwCount.value++
+    const thrownScore = score * multiplier
+    const remainingScore = props.currentScore - thrownScore
+    const isDouble = selectedModifier.value === 'DOUBLE'
 
+    if (isBusted(remainingScore, isDouble)) {
+        resetSelection()
+        return
+    }
+
+    if (remainingScore === 0 && isDouble) {
+        emit('update:currentScore', 0)
+        emit('update:isGameFinished', true)
+        resetSelection()
+        return
+    }
+
+    emit('update:currentScore', remainingScore)
+    resetSelection()
+}
+
+function isBusted(remainingScore: number, isDouble: boolean): boolean {
+    if (remainingScore < 0) {
+        return true
+    }
+
+    if (remainingScore === 1) {
+        return true
+    }
+
+    if (remainingScore === 0 && !isDouble) {
+        return true
+    }
+
+    return false
+}
+
+function resetSelection() {
+    selectedScore.value = 0
     selectedModifier.value = undefined
-    multiplier = 1
-
-    if (throwCount.value === 3) {
-        subtractScore()
-    }
 }
-
-function subtractScore(){
-    if (props.currentScore > 0){
-        emit('update:currentScore', props.currentScore - thrownScore.value)
-
-        thrownScore.value = 0
-        throwCount.value = 0
-        selectedModifier.value = undefined
-        selectedScore.value = 0
-    }
-    else emit('update:isGameFinished', true)
-}
-
-function isBusted(score : number, thrownDarts : number): boolean { 
-
-    if ((score - thrownDarts) <= 0) {
-        return true
-    }
-    return false
-}
-
-function isDoubleOut(multiplier : Modifier, thrownDarts : number, score : number): boolean {
-    if ((score - thrownDarts) === 0 && multiplier === 'DOUBLE') {
-        return true
-    }
-
-    return false
-    
-}
-
 </script>
 
 <style scoped>
-
 .game {
     display: flex;
     flex-direction: column;
@@ -98,5 +92,4 @@ function isDoubleOut(multiplier : Modifier, thrownDarts : number, score : number
     gap: 1rem;
     max-width: 400px;
 }
-
 </style>
