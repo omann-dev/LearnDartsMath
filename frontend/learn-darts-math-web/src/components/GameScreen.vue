@@ -69,6 +69,23 @@ function subtractScore(){
     else emit('update:isGameFinished', true)
 }
 
+function isBusted(score : number, thrownDarts : number): boolean { 
+
+    if ((score - thrownDarts) <= 0) {
+        return true
+    }
+    return false
+}
+
+function isDoubleOut(multiplier : Modifier, thrownDarts : number, score : number): boolean {
+    if ((score - thrownDarts) === 0 && multiplier === 'DOUBLE') {
+        return true
+    }
+
+    return false
+    
+}
+
 </script>
 
 <style scoped>
