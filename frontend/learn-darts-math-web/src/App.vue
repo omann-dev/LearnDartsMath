@@ -1,11 +1,35 @@
 <template>
   <div class="layout">
     <nav class="nav">
-      <router-link to="/">Home</router-link>
-      <router-link to="/login">Login</router-link>
-      <router-link to="/register">Register</router-link>
-      <router-link to="/dashboard">Dashboard</router-link>
-      <router-link to="/training">Training</router-link>
+      <div class="nav-left">
+        <router-link to="/">Home</router-link>
+        <router-link to="/dashboard">Dashboard</router-link>
+        <router-link to="/training">Training</router-link>
+      </div>
+
+      <div class="nav-right">
+        <div class="profile-menu-wrapper">
+          <button class="profile-button" @click="toggleMenu">
+            <div class="avatar">
+              <span>O</span>
+            </div>
+          </button>
+
+          <div v-if="menuOpen" class="dropdown">
+            <router-link to="/login" class="dropdown-item" @click="closeMenu">
+              Login
+            </router-link>
+
+            <router-link to="/register" class="dropdown-item" @click="closeMenu">
+              Register
+            </router-link>
+
+            <router-link to="/profile" class="dropdown-item" @click="closeMenu">
+              Profile
+            </router-link>
+          </div>
+        </div>
+      </div>
     </nav>
 
     <main class="content">
@@ -37,6 +61,20 @@
   </div>
 </template>
 
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const menuOpen = ref(false)
+
+function toggleMenu(): void {
+  menuOpen.value = !menuOpen.value
+}
+
+function closeMenu(): void {
+  menuOpen.value = false
+}
+</script>
+
 <style>
 body {
   margin: 0;
@@ -57,9 +95,67 @@ body {
 
 .nav {
   display: flex;
-  gap: 20px;
+  justify-content: space-between;
+  align-items: center;
   padding: 20px;
   background: #1a1a1a;
+}
+
+.nav-left {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+}
+
+.profile-menu-wrapper {
+  position: relative;
+}
+
+.profile-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #42b883;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  user-select: none;
+}
+
+.dropdown {
+  position: absolute;
+  top: 52px;
+  right: 0;
+  min-width: 160px;
+  background: #262626;
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: 8px 0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  z-index: 100;
+}
+
+.dropdown-item {
+  display: block;
+  padding: 10px 16px;
+  color: white;
+  text-decoration: none;
+}
+
+.dropdown-item:hover {
+  background: #333;
 }
 
 .footer {
@@ -67,6 +163,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 16px 20px;
 }
 
 a {
