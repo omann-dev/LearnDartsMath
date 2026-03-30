@@ -89,6 +89,7 @@ The backend is intended to handle:
 - storage of training sessions and progress
 - database access
 - future statistics and reporting endpoints
+- logging
 
 This separation keeps the application modular and makes it easier to develop, test, and extend both parts independently.
 
